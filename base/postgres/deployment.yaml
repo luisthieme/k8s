@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: postgres
+    labels:
+        app: postgres
+spec:
+    strategy:
+        type: Recreate
+    replicas: 1
+    selector:
+        matchLabels:
+            app: postgres
+    template:
+        metadata:
+            labels:
+                app: postgres
+        spec:
+            containers:
+                - name: postgres-container
+                  image: postgres:15.3
+                  ports:
+                      - containerPort: 5432
+                  volumeMounts:
+                      - name: postgres-data
+                        mountPath: /var/lib/postgresql/data
+                      - mountPath: /dev/shm
+                        name: cache-volume
+                  env:
+                      - name: POSTGRES_PASSWORD
+                        value: test123!
+                      - name: PGDATA
+                        value: /var/lib/postgresql/data/pgdata/
+            volumes:
+                - name: postgres-data
+                  persistentVolumeClaim:
+                      claimName: postgres
+                - emptyDir:
+                      medium: Memory
+                      sizeLimit: 1Gi
+                  name: cache-volume
