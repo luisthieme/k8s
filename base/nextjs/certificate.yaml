@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+    name: nextjs-demo-certificate
+    namespace: test
+spec:
+    secretName: nextjs-demo-ingress-tls
+    dnsNames:
+        - luisthieme.com
+    issuerRef:
+        name: letsencrypt-prod
+        kind: ClusterIssuer
+    commonName: luisthieme.com
+    acme:
+        config:
+            - http01:
+                  ingressClass: nginx

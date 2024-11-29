@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: nextjs-demo-ingress
+    annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+    ingressClassName: nginx
+    tls:
+        - hosts:
+              - luisthieme.com
+          secretName: nextjs-demo-ingress-tls
+    rules:
+        - host: luisthieme.com
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: nextjs-demo
+                            port:
+                                number: 3000
