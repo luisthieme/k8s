@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: node-demo
+spec:
+    selector:
+        matchLabels:
+            app: node-demo
+    template:
+        metadata:
+            labels:
+                app: node-demo
+        spec:
+            containers:
+                - name: node-demo
+                  image: thiemeluis/node-demo:0.0.1
+                  resources:
+                      limits:
+                          memory: '128Mi'
+                          cpu: '500m'
+                  ports:
+                      - containerPort: 8090
